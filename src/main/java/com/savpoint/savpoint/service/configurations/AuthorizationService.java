@@ -1,4 +1,4 @@
-package com.savpoint.savpoint.service.config;
+package com.savpoint.savpoint.service.configurations;
 
 import com.savpoint.savpoint.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

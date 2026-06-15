@@ -1,4 +1,4 @@
-package com.savpoint.savpoint.config;
+package com.savpoint.savpoint.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
