@@ -15,10 +15,10 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    @Value("jwt.secret")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("jwt.expiration")
+    @Value("${jwt.expiration}")
     private Long jwtExpiration;
 
     public String generateToken (UserEntity userEntity) {
