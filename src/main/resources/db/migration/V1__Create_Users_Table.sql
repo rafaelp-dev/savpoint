@@ -5,6 +5,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(50),
     created_at TIMESTAMP NOT NULL,
+    profile_created BOOLEAN NOT NULL DEFAULT FALSE,
     UNIQUE(email)
 );
 
