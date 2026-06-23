@@ -37,6 +37,9 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private Boolean profileCreated;
+
     public UserEntity() {}
 
     public UserEntity(String username, String email, String password) {
@@ -45,6 +48,7 @@ public class UserEntity implements UserDetails {
         this.password = password;
         this.role = UserRole.DEFAULT;
         this.createdAt = LocalDateTime.now();
+        this.profileCreated = false;
     }
 
     @Override
