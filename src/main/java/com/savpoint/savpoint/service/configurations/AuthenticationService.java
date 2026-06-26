@@ -5,6 +5,7 @@ import com.savpoint.savpoint.dtos.requests.UserRegisterRequest;
 import com.savpoint.savpoint.dtos.responses.UserLoginResponse;
 import com.savpoint.savpoint.dtos.responses.UserRegisterResponse;
 import com.savpoint.savpoint.entities.UserEntity;
+import com.savpoint.savpoint.enums.UserRole;
 import com.savpoint.savpoint.exceptions.ConflictException;
 import com.savpoint.savpoint.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +39,8 @@ public class AuthenticationService {
                 userRegisterRequest.email(),
                 encyptedPassword
         );
+
+        userEntity.setRole(UserRole.REGISTERED);
 
         userRepository.save(userEntity);
 
