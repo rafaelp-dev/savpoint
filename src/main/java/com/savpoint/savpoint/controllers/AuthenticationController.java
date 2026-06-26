@@ -6,6 +6,7 @@ import com.savpoint.savpoint.dtos.responses.UserLoginResponse;
 import com.savpoint.savpoint.dtos.responses.UserRegisterResponse;
 import com.savpoint.savpoint.service.configurations.AuthenticationService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class AuthenticationController {
     public ResponseEntity<UserRegisterResponse> register (@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
         UserRegisterResponse userRegisterResponse = authenticationService.register(userRegisterRequest);
 
-        return ResponseEntity.ok().body(userRegisterResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRegisterResponse);
     }
 
     @PostMapping("/login")
