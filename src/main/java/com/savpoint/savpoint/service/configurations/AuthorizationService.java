@@ -1,5 +1,6 @@
 package com.savpoint.savpoint.service.configurations;
 
+import com.savpoint.savpoint.exceptions.NotFoundException;
 import com.savpoint.savpoint.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,6 @@ public class AuthorizationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com email: " + email));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com email: " + email));
     }
 }

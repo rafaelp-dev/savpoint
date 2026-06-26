@@ -5,15 +5,13 @@ import com.savpoint.savpoint.dtos.requests.UserRegisterRequest;
 import com.savpoint.savpoint.dtos.responses.UserLoginResponse;
 import com.savpoint.savpoint.dtos.responses.UserRegisterResponse;
 import com.savpoint.savpoint.entities.UserEntity;
+import com.savpoint.savpoint.exceptions.ConflictException;
 import com.savpoint.savpoint.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-//Colocar os controle de erro
 
 @Service
 public class AuthenticationService {
@@ -30,7 +28,7 @@ public class AuthenticationService {
 
     public UserRegisterResponse register (UserRegisterRequest userRegisterRequest) {
         if (userRepository.findByEmail(userRegisterRequest.email()).isPresent()) {
-            throw new UsernameNotFoundException("Este email já está cadastrado");
+            throw new ConflictException("Este email já está cadastrado");
         }
 
         String encyptedPassword =new BCryptPasswordEncoder().encode(userRegisterRequest.password());
