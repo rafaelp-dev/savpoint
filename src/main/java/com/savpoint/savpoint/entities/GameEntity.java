@@ -36,7 +36,7 @@ public class GameEntity {
     private String coverUrl;
 
     @Column(nullable = true)
-    private String playtime;
+    private Integer playtime;
 
     @Column(nullable = false)
     private String plataforms;
@@ -53,9 +53,12 @@ public class GameEntity {
     @Column(nullable = false)
     private LocalDateTime addedAt;
 
+    @Column(nullable = false)
+    private boolean completedInfo;
+
     public GameEntity () {}
 
-    public GameEntity(String externalId, String slug, String title, String description, LocalDate releaseDate, String coverUrl, String playtime, String plataforms, String genres, String developers, String publisher) {
+    public GameEntity(String externalId, String slug, String title, String description, LocalDate releaseDate, String coverUrl, Integer playtime, String plataforms, String genres, String developers, String publisher) {
         this.externalId = externalId;
         this.slug = slug;
         this.title = title;
@@ -68,5 +71,6 @@ public class GameEntity {
         this.developers = developers;
         this.publisher = publisher;
         this.addedAt = LocalDateTime.now();
+        this.completedInfo = false;
     }
 }
