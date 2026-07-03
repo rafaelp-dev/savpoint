@@ -29,13 +29,13 @@ public class GameEntity {
     @Column(nullable = true)
     private String description;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalDate releaseDate;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String coverUrl;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String playtime;
 
     @Column(nullable = false)
