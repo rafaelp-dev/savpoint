@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 public class RawgClient {
 
     @Bean
-    public RestClient rawgClient() {
+    public RestClient restClient() {
         return RestClient.builder()
                 .baseUrl("https://api.rawg.io/api")
                 .defaultHeader("Content-Type", "application/json")
