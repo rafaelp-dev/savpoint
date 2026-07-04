@@ -31,3 +31,5 @@ build/
 
 ### Application Properties ###
 application-local.properties
+
+src/main/java/com/savpoint/savpoint/controllers/test.java
