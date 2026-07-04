@@ -2,6 +2,7 @@ package com.savpoint.savpoint.service.rawg;
 
 import com.savpoint.savpoint.configurations.RawgClient;
 import com.savpoint.savpoint.dtos.rawg.GameDetailsResponse;
+import com.savpoint.savpoint.dtos.rawg.GameSearchResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class RawgService {
     }
 
     public GameDetailsResponse getGame (String game) {
-        return rawgClient.restClient().get()
+        GameSearchResponse searchResponse = rawgClient.restClient().get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/games")
                         .queryParam("search", game)
@@ -26,6 +27,11 @@ public class RawgService {
                         .queryParam("page_size", 1)
                         .build())
                 .retrieve()
-                .body(GameDetailsResponse.class);
+                .body(GameSearchResponse.class);
+
+        if (searchResponse != null && searchResponse.results() != null && !searchResponse.results().isEmpty()) {
+            return searchResponse.results().get(0);
+        }
+        return null;
     }
 }
