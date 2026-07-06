@@ -18,7 +18,7 @@ public class RawgService {
         this.rawgClient = rawgClient;
     }
 
-    public GameDetailsResponse getGame (String game) {
+    public GameDetailsResponse findFirstGameData(String game) {
         GameSearchResponse searchResponse = rawgClient.restClient().get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/games")
