@@ -3,7 +3,6 @@ package com.savpoint.savpoint.service.configurations;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.savpoint.savpoint.entities.UserEntity;
 import com.savpoint.savpoint.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,7 @@ public class TokenService {
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
 
-    public String generateToken (UserEntity userEntity) {
+    public String generateToken(UserEntity userEntity) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
 
@@ -36,14 +35,14 @@ public class TokenService {
         }
     }
 
-    public String validateToken (String token) {
-            Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
+    public String validateToken(String token) {
+        Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
 
-            return JWT.require(algorithm)
-                    .withIssuer("savpoint-api")
-                    .build()
-                    .verify(token)
-                    .getSubject();
+        return JWT.require(algorithm)
+                .withIssuer("savpoint-api")
+                .build()
+                .verify(token)
+                .getSubject();
     }
 
     private Instant genExpirationDate() {
