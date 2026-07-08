@@ -3,7 +3,7 @@ package com.savpoint.savpoint.service.domain;
 import com.savpoint.savpoint.dtos.rawg.GameDetailsResponse;
 import com.savpoint.savpoint.entities.GameEntity;
 import com.savpoint.savpoint.repositories.GameRepository;
-import com.savpoint.savpoint.service.rawg.RawgService;
+import com.savpoint.savpoint.service.external.RawgService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

@@ -1,6 +1,7 @@
-package com.savpoint.savpoint.service.rawg;
+package com.savpoint.savpoint.service.external;
 
-import com.savpoint.savpoint.configurations.RawgClient;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.client.RestClient;
 import com.savpoint.savpoint.dtos.rawg.GameDetailsResponse;
 import com.savpoint.savpoint.dtos.rawg.GameSearchResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,14 +16,14 @@ public class RawgService {
     @Value("${rawg.api.key}")
     private String rawgApiKey;
 
-    private final RawgClient rawgClient;
+    private final RestClient restClient;
 
-    public RawgService(RawgClient rawgClient) {
-        this.rawgClient = rawgClient;
+    public RawgService(@Qualifier("rawgRestClient") RestClient restClient) {
+        this.restClient = restClient;
     }
 
     public List<GameDetailsResponse> findTop3GameData(String game) {
-        GameSearchResponse searchResponse = rawgClient.restClient().get()
+        GameSearchResponse searchResponse = restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/games")
                         .queryParam("search", game)
@@ -39,7 +40,7 @@ public class RawgService {
     }
 
     public GameDetailsResponse findGameBySlug(String slug) {
-        return rawgClient.restClient().get()
+        return restClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/games/{slug}")
                         .queryParam("key", rawgApiKey)
