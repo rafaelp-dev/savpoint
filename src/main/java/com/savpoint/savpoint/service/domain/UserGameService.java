@@ -105,4 +105,26 @@ public class UserGameService {
                                 ug.getReview(),
                                 ug.getAddedAt())).collect(Collectors.toList());
         }
+
+        public List<UserGameResponse> listUserGamesByRating(Authentication authentication, Integer rating) {
+                String email = authentication.getName();
+
+                UserProfileEntity userProfile = userProfileRepository.findByUser_Email(email)
+                                .orElseThrow(() -> new NotFoundException(
+                                                "Perfil não encontrado para o usuário atual. Crie um perfil primeiro."));
+
+                List<UserGameEntity> userGames = userGameRepository
+                                .findByProfile_UserProfileIdAndRating(userProfile.getUserProfileId(), rating);
+
+                return userGames.stream().map(ug -> new UserGameResponse(
+                                ug.getUserGameId(),
+                                ug.getGame().getGameId(),
+                                ug.getGame().getTitle(),
+                                ug.getGame().getCoverUrl(),
+                                ug.getStatus(),
+                                ug.getFavorite(),
+                                ug.getRating(),
+                                ug.getReview(),
+                                ug.getAddedAt())).collect(Collectors.toList());
+        }
 }
