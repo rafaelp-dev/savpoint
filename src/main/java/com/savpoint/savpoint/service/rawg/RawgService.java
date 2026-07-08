@@ -37,4 +37,14 @@ public class RawgService {
         }
         return Collections.emptyList();
     }
+
+    public GameDetailsResponse findGameBySlug(String slug) {
+        return rawgClient.restClient().get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/games/{slug}")
+                        .queryParam("key", rawgApiKey)
+                        .build(slug))
+                .retrieve()
+                .body(GameDetailsResponse.class);
+    }
 }

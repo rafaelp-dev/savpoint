@@ -13,4 +13,6 @@ public interface GameRepository extends JpaRepository<GameEntity, Long> {
     List<GameEntity> findTop3ByTitleLikeIgnoreCase(String title);
 
     Optional<GameEntity> findByExternalId(String externalId);
+
+    Optional<GameEntity> findBySlug(String slug);
 }

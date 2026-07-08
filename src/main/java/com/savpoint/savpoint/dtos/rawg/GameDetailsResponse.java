@@ -10,5 +10,8 @@ public record GameDetailsResponse(
         String background_image,
         Integer playtime,
         List<PlatformDTO> platforms,
-        List<GenreDTO> genres
+        List<GenreDTO> genres,
+        String description_raw,
+        List<DeveloperDTO> developers,
+        List<PublisherDTO> publishers
 ){}

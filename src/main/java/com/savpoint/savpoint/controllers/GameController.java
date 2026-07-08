@@ -22,4 +22,10 @@ public class GameController {
         Object response = gameService.searchGame(name);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{slug}/complete-info")
+    public ResponseEntity<Object> completeGameInfo(@org.springframework.web.bind.annotation.PathVariable String slug) {
+        Object response = gameService.completeGameInfoBySlug(slug);
+        return ResponseEntity.ok(response);
+    }
 }

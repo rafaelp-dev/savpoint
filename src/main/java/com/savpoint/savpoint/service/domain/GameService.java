@@ -73,4 +73,39 @@ public class GameService {
 
         return gamesToReturn;
     }
+
+    public GameEntity completeGameInfoBySlug(String slug) {
+        Optional<GameEntity> gameOpt = gameRepository.findBySlug(slug);
+
+        if (gameOpt.isEmpty()) {
+            throw new com.savpoint.savpoint.exceptions.NotFoundException("Jogo não encontrado no banco de dados local com o slug: " + slug);
+        }
+
+        GameEntity game = gameOpt.get();
+
+        if (game.isCompletedInfo()) {
+            return game;
+        }
+
+        GameDetailsResponse rawgGame = rawgService.findGameBySlug(slug);
+
+        if (rawgGame != null) {
+            String developers = rawgGame.developers() != null
+                    ? rawgGame.developers().stream().map(d -> d.name()).collect(Collectors.joining(", "))
+                    : "";
+
+            String publishers = rawgGame.publishers() != null
+                    ? rawgGame.publishers().stream().map(p -> p.name()).collect(Collectors.joining(", "))
+                    : "";
+
+            game.setDescription(rawgGame.description_raw());
+            game.setDevelopers(developers);
+            game.setPublisher(publishers);
+            game.setCompletedInfo(true);
+
+            return gameRepository.save(game);
+        }
+
+        throw new com.savpoint.savpoint.exceptions.NotFoundException("Não foi possível buscar detalhes do jogo no RAWG para o slug: " + slug);
+    }
 }
