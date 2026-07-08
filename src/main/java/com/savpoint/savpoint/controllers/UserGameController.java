@@ -38,4 +38,10 @@ public class UserGameController {
         List<UserGameResponse> games = userGameService.listUserGames(authentication);
         return ResponseEntity.ok(games);
     }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<UserGameResponse>> listFavoriteUserGames(Authentication authentication) {
+        List<UserGameResponse> games = userGameService.listFavoriteUserGames(authentication);
+        return ResponseEntity.ok(games);
+    }
 }

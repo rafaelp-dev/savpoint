@@ -12,4 +12,6 @@ public interface UserGameRepository extends JpaRepository<UserGameEntity, Long> 
     Optional<UserGameEntity> findByProfile_UserProfileIdAndGame_GameId(Long profileId, Long gameId);
 
     java.util.List<UserGameEntity> findByProfile_UserProfileId(Long profileId);
+
+    java.util.List<UserGameEntity> findByProfile_UserProfileIdAndFavoriteTrue(Long profileId);
 }
