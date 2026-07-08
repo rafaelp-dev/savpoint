@@ -11,4 +11,6 @@ public interface UserProfileRepository extends JpaRepository<UserProfileEntity, 
     Optional<UserProfileEntity> findByDisplayName(String displayName);
 
     boolean existsByDisplayName(String displayName);
+
+    Optional<UserProfileEntity> findByUser_Email(String email);
 }
