@@ -17,4 +17,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> notFoundHandler (NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InsufficientCreditsException.class)
+    public ResponseEntity<String> insufficientCreditsHandler (InsufficientCreditsException ex) {
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(ex.getMessage());
+    }
 }
