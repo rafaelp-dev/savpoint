@@ -2,6 +2,7 @@ package com.savpoint.savpoint.service.domain;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.savpoint.savpoint.dtos.GameSuggestionHistory;
 import com.savpoint.savpoint.dtos.responses.GameSuggestionResponse;
 import com.savpoint.savpoint.dtos.responses.GroqResponse;
 import com.savpoint.savpoint.entities.UserProfileEntity;
@@ -9,10 +10,12 @@ import com.savpoint.savpoint.exceptions.InsufficientCreditsException;
 import com.savpoint.savpoint.exceptions.NotFoundException;
 import com.savpoint.savpoint.repositories.UserProfileRepository;
 import com.savpoint.savpoint.service.external.GroqService;
+import com.savpoint.savpoint.service.storage.GameSuggestionStorageService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,11 +26,13 @@ public class GameSuggestionService {
     private final GroqService groqService;
     private final ObjectMapper objectMapper;
     private final UserProfileRepository userProfileRepository;
+    private final GameSuggestionStorageService storageService;
 
-    public GameSuggestionService(GroqService groqService, ObjectMapper objectMapper, UserProfileRepository userProfileRepository) {
+    public GameSuggestionService(GroqService groqService, ObjectMapper objectMapper, UserProfileRepository userProfileRepository, GameSuggestionStorageService storageService) {
         this.groqService = groqService;
         this.objectMapper = objectMapper;
         this.userProfileRepository = userProfileRepository;
+        this.storageService = storageService;
     }
 
     public List<GameSuggestionResponse> generateSuggestions(Authentication authentication, String game, String experience) {
@@ -54,11 +59,28 @@ public class GameSuggestionService {
             profile.setCredits(profile.getCredits().subtract(SUGGESTION_COST));
             userProfileRepository.save(profile);
 
+            saveToJson(email, game, experience, suggestions);
+
             return suggestions;
         } catch (InsufficientCreditsException e) {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao processar a resposta da IA: " + e.getMessage(), e);
+        }
+    }
+
+    private void saveToJson(String email, String game, String experience, List<GameSuggestionResponse> suggestions) {
+        try {
+            GameSuggestionHistory history = new GameSuggestionHistory(
+                    LocalDateTime.now(),
+                    email,
+                    game,
+                    experience,
+                    suggestions
+            );
+            storageService.saveSuggestion(history);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao salvar histórico de sugestões: " + e.getMessage(), e);
         }
     }
 
@@ -97,10 +119,10 @@ public class GameSuggestionService {
                 Regras:
                 - Retorne exatamente 5 jogos.
                 - Priorize a experiência desejada, não apenas gênero ou franquia.
-                - Distribua o nível de semelhança da seguinte forma:
-                  - 3 jogos com "MUITO"
-                  - 1 jogo com "MÉDIO"
-                  - 1 jogo com "POUCO"
+                - Distribua os jogos nas seguintes categorias de semelhança, priorizando sempre os mais semelhantes:
+                  - "MUITO"
+                  - "MÉDIO"
+                  - "POUCO"
                 - O motivo deve ter apenas uma frase curta explicando por que o jogo foi recomendado.
                 - Não retorne nenhuma explicação fora do JSON.
                 
@@ -116,13 +138,13 @@ public class GameSuggestionService {
                   {
                     "name": "Nome completo do jogo",
                     "platforms": ["PC", "PlayStation 5"],
-                    "similarity": "MÉDIO",
+                    "similarity": "MUITO",
                     "reason": "Compartilha alguns elementos de gameplay, mas com foco diferente."
                   },
                   {
                     "name": "Nome completo do jogo",
                     "platforms": ["PC", "Xbox Series X/S"],
-                    "similarity": "POUCO",
+                    "similarity": "MUITO",
                     "reason": "Apesar das diferenças, oferece uma experiência semelhante em um aspecto específico."
                   }
                 ]
